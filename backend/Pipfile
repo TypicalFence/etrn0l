@@ -1,0 +1,19 @@
+[[source]]
+name = "pypi"
+url = "https://pypi.org/simple"
+verify_ssl = true
+
+[dev-packages]
+flake8 = "*"
+flake8-quotes = "*"
+pylint-mongoengine = "*"
+mypy = "*"
+
+[packages]
+flask = "*"
+flask-controller = {git = "https://github.com/TypicalFence/FlaskController.git"}
+marshmallow = "*"
+mongoengine = "*"
+
+[scripts]
+serve = "flask run"
