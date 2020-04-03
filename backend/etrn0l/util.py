@@ -10,10 +10,9 @@ class ApiResponse(JsonSerializable):
         return self.__dict__
 
     @staticmethod
-    def ok(data=None, msg="ok"):
-        print("FUIUUUUUUUUK")
-        print(data)
-        print("FUIUUUUUUUUK")
+    def ok(data=None, msg="ok", count=None):
+        if count is not None:
+            return ListApiResponse(code=200, msg=msg, data=data, count=count)
         if data is not None:
             return DataApiResponse(code=200, msg=msg, data=data)
 
@@ -36,3 +35,8 @@ class DataApiResponse(ApiResponse):
     def __init__(self, code=None, msg="", data=None):
         super().__init__(code, msg)
         self.data = data
+
+class ListApiResponse(DataApiResponse):
+    def __init__(self, code=None, msg="", data=None, count=None):
+        super().__init__(code, msg, data)
+        self.count = count

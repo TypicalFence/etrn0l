@@ -1,4 +1,4 @@
-from typing import Optional
+from typing import Optional, List
 from abc import ABC, abstractmethod, abstractproperty
 from ..model import FlashLoop
 
@@ -37,5 +37,21 @@ class FlashLoopService(ABC):
         pass
 
     @abstractmethod
-    def get_randomLoop(self) -> FlashLoop:
+    def get_loop_by_number(self, loop_number: int) -> Optional[FlashLoop]:
+        pass
+
+    @abstractmethod
+    def get_random_loop(self) -> FlashLoop:
+        pass
+
+    @abstractmethod
+    def get_loop_count(self) -> int:
+        pass
+
+    @abstractmethod
+    def list_loops(self, start, count) -> List[FlashLoop]:
+        pass
+
+    @abstractmethod
+    def update_loop(self, loop: FlashLoop) -> Optional[FlashLoop]:
         pass

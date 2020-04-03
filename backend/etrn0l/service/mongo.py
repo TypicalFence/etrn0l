@@ -1,6 +1,6 @@
 """Service classes implementation using MongoDB."""
 
-from typing import Optional
+from typing import Optional, List
 from mongoengine import Document, StringField  # type: ignore
 from mongoengine import connect, ListField, SequenceField
 from . import FlashLoop, FlashLoopService
@@ -59,7 +59,40 @@ class MongoFlashLoopService(FlashLoopService):
         except FlashLoopDocument.DoesNotExist:
             return None
 
-    def get_randomLoop(self) -> FlashLoop:
+    def get_random_loop(self) -> FlashLoop:
         objects = FlashLoopDocument.objects
-        loop = objects.aggregate([{"$sample": {"size": 1}}]).first()
-        return loop.to_model()
+        loop = list(objects.aggregate([{"$sample": {"size": 1}}]))[0]
+        loop["id"] = loop["_id"]
+        del loop["_id"]
+        return FlashLoopDocument(**loop).to_model()
+
+    def get_loop_count(self) -> int:
+        return FlashLoopDocument.objects.count()
+
+    def list_loops(self, start, count) -> List[FlashLoop]:
+
+        if start != 0:
+            start = start - 1
+
+        models = FlashLoopDocument.objects.skip(start).limit(count)
+        return list(map(lambda x: x.to_model(), models))
+
+    def get_loop_by_number(self, loop_number: int) -> Optional[FlashLoop]:
+        try:
+            loop = FlashLoopDocument.objects.get(number=loop_number)
+            return loop.to_model()
+        except FlashLoopDocument.DoesNotExist:
+            return None
+
+    def update_loop(self, loop: FlashLoop) -> Optional[FlashLoop]:
+        try:
+            db_loop = FlashLoopDocument.objects.get(id=loop.id)
+        except FlashLoopDocument.DoesNotExist:
+            return None
+
+        db_loop.tags = loop.tags
+        db_loop.source_audio = loop.source_audio
+        db_loop.source_video = loop.source_video
+        db_loop.save()
+
+        return db_loop.to_model()
