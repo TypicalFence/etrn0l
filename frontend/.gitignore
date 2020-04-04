@@ -90,3 +90,4 @@ key.pub
 
 config.private.js
 dist/
+pkg/
