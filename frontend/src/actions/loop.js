@@ -47,8 +47,15 @@ export const fetchLoop = id => (dispatch) => {
 };
 
 export const gotToLoop = id => (dispatch) => {
-    dispatch(push(`/${id}`));
-    dispatch(fetchLoop(id));
+    const ruffleBuggy = true;
+    if (ruffleBuggy) {
+        // makes redux super useless lol
+        // but ruffle currenlty doesn't seem to like being destroyed
+        document.location.href = `/${id}`;
+    } else {
+        dispatch(push(`/${id}`));
+        dispatch(fetchLoop(id));
+    }
 };
 
 export const goToRandomLoop = () => async (dispatch) => {
