@@ -9,3 +9,4 @@ class FlashLoop():
     number: Optional[int] = None
     source_audio: Optional[str] = None
     source_video: Optional[str] = None
+    file_url: Optional[str] = None

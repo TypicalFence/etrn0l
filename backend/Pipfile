@@ -14,6 +14,9 @@ flask = "*"
 flask-controller = {git = "https://github.com/TypicalFence/FlaskController.git"}
 marshmallow = "*"
 mongoengine = "*"
+boto3 = "*"
+botocore = "*"
+kyasshu = {git = "https://github.com/TypicalFence/kyasshu.git",subdirectory = "core"}
 
 [scripts]
 serve = "flask run"

@@ -9,16 +9,21 @@ class FlashFileService(ABC):
     This makes it irrelevant where we actually store the files.
     They could really be anywhere.
     """
+
     @abstractmethod
-    def set_file(self, loop_id):
+    def set_file(self, loop_id: str, fileobj) -> bool:
         pass
 
     @abstractmethod
-    def remove_file(self, loop_id):
+    def remove_file(self, loop_id: str) -> bool:
         pass
 
     @abstractmethod
-    def file_exists(self, loop_id):
+    def get_file(self, loop_id: str) -> Optional[str]:
+        """Returns an externally accessable url to the flash file."""
+
+    @abstractmethod
+    def file_exists(self, loop_id: str) -> bool:
         pass
 
 
@@ -54,4 +59,21 @@ class FlashLoopService(ABC):
 
     @abstractmethod
     def update_loop(self, loop: FlashLoop) -> Optional[FlashLoop]:
+        pass
+
+class AuthService(ABC):
+    @abstractmethod
+    def issue_token(self, username, password):
+        pass
+
+    @abstractmethod
+    def revoke_token(self, token):
+        pass
+
+    @abstractmethod
+    def check_token(self, token) -> bool:
+        pass
+
+    @abstractmethod
+    def list_tokens(self, username):
         pass

@@ -1,17 +1,21 @@
 from flask import request, jsonify
 from flask_controller import FlaskController, route  # type: ignore
 from marshmallow import ValidationError
-from ..service import FlashLoopService
+from ..service import FlashLoopService, FlashFileService
 from ..schema import FlashLoopRequestSchema
-from ..util import ApiResponse
+from ..ext import ApiResponse
 
 
 @route("/api/v1/admin")
 class AdminController(FlaskController):
     """Exposes a rest interface for administrating the site."""
-    def __init__(self, flash_loop_service: FlashLoopService):
+
+    def __init__(self,
+                 flash_loop_service: FlashLoopService,
+                 flash_file_service: FlashFileService):
         super().__init__()
         self.flash_loops = flash_loop_service
+        self.flash_files = flash_file_service
 
     @route("/loops", methods=["GET"])
     def get_loops(self):
@@ -77,3 +81,28 @@ class AdminController(FlaskController):
             return jsonify(ApiResponse.not_found()), 404
 
         return jsonify(ApiResponse.ok(updated_loop)), 200
+
+    @route("/loops/<id>/file", methods=["GET"])
+    def get_flash_file(self, id):
+        url = self.flash_files.get_file(id)
+
+        if url is not None:
+            print(url)
+            return jsonify(ApiResponse.ok({"url": url})), 200
+
+        return jsonify(ApiResponse.not_found), 404
+
+    @route("/loops/<id>/file", methods=["PUT"])
+    def put_flash_file(self, id):
+        if "file" in request.files:
+            fileobj = request.files["file"].stream
+            success = self.flash_files.set_file(id, fileobj)
+
+            if success:
+                url = self.flash_files.get_file(id)
+                print(url)
+                return jsonify(ApiResponse.ok({"url": url})), 200
+
+            return jsonify(ApiResponse.internal_error()), 500
+
+        return jsonify(ApiResponse.bad_request()), 400

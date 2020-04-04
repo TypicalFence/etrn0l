@@ -1,2 +1,5 @@
 [MASTER]
 load-plugins=pylint_mongoengine
+
+[MESSAGES CONTROL]
+disable=W0622
