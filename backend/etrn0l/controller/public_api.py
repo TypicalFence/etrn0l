@@ -48,9 +48,9 @@ class PublicApiController(FlaskController):
         return loop
 
     @route("/random", methods=["get"])
-    def get_random(self):
+    def get_random_loop_id(self):
         loop = self.flash_loops.get_random_loop()
-        return self.get_loop(loop.number)
+        return jsonify(ApiResponse.ok({"number": loop.number})), 200
 
     @route("/loops/<number>", methods=["get"])
     def get_loop(self, number):
@@ -82,3 +82,8 @@ class PublicApiController(FlaskController):
             "next": next_loop,
             "prev": prev_loop
         })), 200
+
+    @route("/loops/random", methods=["get"])
+    def get_random_loop(self):
+        loop = self.flash_loops.get_random_loop()
+        return self.get_loop(loop.number)

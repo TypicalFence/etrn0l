@@ -1,0 +1,25 @@
+body {
+    color: white;
+    background-color: black;
+    text-align: center;
+}
+
+
+.loop-container {
+    width: 60%;
+    margin: 0 auto;
+
+    ruffle-object {
+        width: 100%;
+    }
+
+    .loop-nav {
+        margin: 0 auto;
+        padding: 1rem;
+
+        span {
+            margin-left: 0.5rem;
+            margin-right: 0.5rem;
+        }
+    }
+}

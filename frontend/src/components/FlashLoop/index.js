@@ -1,3 +1,3 @@
 import FlashLoop from "./FlashLoop";
 
-export FlashLoop;
+export default FlashLoop;

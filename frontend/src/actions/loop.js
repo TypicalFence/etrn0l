@@ -1,5 +1,6 @@
-export const FETCH_STATUS = "FETCH_LOOP";
-export const FETCH_RANDOM_LOOP = "SHOW_LOOP";
+import { push } from "connected-react-router";
+
+export const FETCH_LOOP = "SHOW_LOOP";
 export const SHOW_LOOP = "SHOW_LOOP";
 export const OPEN_TAGS = "OPEN_TAGS";
 export const CLOSE_TAGS = "CLOSE_TAGS";
@@ -13,11 +14,11 @@ export const showLoop = (data) => {
     let nextLoop = null;
 
     if (prev !== null) {
-        prevLoop = prev.number;
+        prevLoop = prev;
     }
 
     if (next !== null) {
-        nextLoop = next.number;
+        nextLoop = next;
     }
 
     return {
@@ -32,6 +33,7 @@ export const show404 = () => ({
     type: SHOW_404,
 });
 
+
 export const fetchLoop = id => (dispatch) => {
     fetch(`/api/v1/loops/${id}`)
         .then(resp => resp.json())
@@ -42,4 +44,21 @@ export const fetchLoop = id => (dispatch) => {
                 dispatch(show404());
             }
         });
+};
+
+export const gotToLoop = id => (dispatch) => {
+    dispatch(push(`/${id}`));
+    dispatch(fetchLoop(id));
+};
+
+export const goToRandomLoop = () => async (dispatch) => {
+    const response = await fetch("/api/v1/random").then(resp => resp.json);
+
+    if (response.code === 200) {
+        const id = response.data.number;
+
+        dispatch(gotToLoop(id));
+    } else {
+        dispatch(show404());
+    }
 };

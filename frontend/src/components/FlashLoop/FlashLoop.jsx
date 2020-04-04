@@ -5,7 +5,13 @@ import { register_element } from "../../../vendor/ruffle/web/js-src/register-ele
 
 register_element("ruffle-object", RuffleObject);
 
-const FlashLoop = ({ loop }) => <ruffle-object data={loop.file_url} />;
+const FlashLoop = ({ loop }) => {
+    if (loop.file_url) {
+        return <ruffle-object data={loop.file_url} />;
+    }
+
+    return <h1>OH NO!</h1>;
+};
 
 FlashLoop.propTypes = {
     loop: PropTypes.object.isRequired,

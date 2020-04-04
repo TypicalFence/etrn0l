@@ -19,6 +19,9 @@ module.exports = {
         "jsx-a11y/label-has-for": [0], // Deprecated since october 2018
         "jsx-a11y/media-has-caption": [0],
         "react/forbid-prop-types": [false],
+        "react/jsx-no-bind": [1, {
+          "ignoreDOMComponents": true,
+        }],
     },
     "settings": {
         "import/resolver": {
