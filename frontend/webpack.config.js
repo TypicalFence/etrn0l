@@ -5,9 +5,16 @@ const HtmlWebPackPlugin = require("html-webpack-plugin");
 const ErrorOverlayPlugin = require("error-overlay-webpack-plugin");
 const ExtractCssPlugin = require("mini-css-extract-plugin");
 const PurgecssPlugin = require("purgecss-webpack-plugin");
+const WasmPackPlugin = require("@wasm-tool/wasm-pack-plugin");
 
 
 module.exports = (env, options) => {
+    let mode = "production";
+
+    if (options && options.mode) {
+        mode = options.mode;
+    }
+
     const devMode = options.mode !== "production";
     const PATHS = {
         src: path.join(__dirname, "src"),
@@ -19,6 +26,11 @@ module.exports = (env, options) => {
         }),
         new ErrorOverlayPlugin(),
         new ExtractCssPlugin(),
+        new WasmPackPlugin({
+            crateDirectory: path.resolve(__dirname, "./vendor/ruffle/web"),
+            outName: "ruffle",
+            forceMode: mode,
+        }),
     ];
 
     if (!devMode) {
